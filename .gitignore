@@ -1,0 +1,14 @@
+# The storage files created by the database
+/data/*
+/metadata/*
+
+.DS_Store
+
+# Xcode files
+*~.nib
+*.swp
+build/
+*.pbxuser
+*.perspective
+*.perspectivev3
+xcuserdata
