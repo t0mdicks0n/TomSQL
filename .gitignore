@@ -1,6 +1,6 @@
 # The storage files created by the database
-/Database/*
-/Structure/*
+/TomSQL/Database/*
+/TomSQL/Structure/*
 
 .DS_Store
 
