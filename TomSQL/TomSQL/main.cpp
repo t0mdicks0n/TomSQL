@@ -7,11 +7,30 @@
 //
 
 #include <iostream>
+#include <fstream>
+
+// The CSV data class
+class CSV {
+  std::string fileName;
+public:
+  CSV (std::string);
+};
+
+CSV::CSV (std::string tableName) {
+  fileName = "./data/" + tableName + ".csv";
+  //fileName = tableName + ".csv";
+  std::ofstream dataFile;
+  dataFile.open(fileName);
+  dataFile << "Testing";
+  dataFile.close();
+}
+
+// The metadata class
+
 
 // Create class table that takes a name as input and
 // - creates a csv file
 // - creates some kind of a metadata file that describes the database
-
 class Table {
   std::string name;
   std::string columnNames[20];
@@ -23,6 +42,7 @@ public:
 
 Table::Table (std::string tableName) {
   name = tableName;
+  CSV createdTable (tableName);
 }
 
 void Table::inputColumn (std::string columnName) {
