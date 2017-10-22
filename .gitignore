@@ -1,6 +1,6 @@
 # The storage files created by the database
-/data/*
-/metadata/*
+/Database/*
+/Structure/*
 
 .DS_Store
 

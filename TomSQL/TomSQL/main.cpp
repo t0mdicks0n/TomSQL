@@ -9,55 +9,75 @@
 #include <iostream>
 #include <fstream>
 
-// The CSV data class
-class CSV {
-  std::string fileName;
-public:
-  CSV (std::string);
-};
-
-CSV::CSV (std::string tableName) {
-  fileName = "./data/" + tableName + ".csv";
-  //fileName = tableName + ".csv";
-  std::ofstream dataFile;
-  dataFile.open(fileName);
-  dataFile << "Testing";
-  dataFile.close();
-}
-
-// The metadata class
-
-
 // Create class table that takes a name as input and
 // - creates a csv file
 // - creates some kind of a metadata file that describes the database
 class Table {
+private:
   std::string name;
-  std::string columnNames[20];
-  int arrayCount = 0;
 public:
+  // TODO: Make the table structure dynamically created:
+  struct tableStructure {
+    int id;
+    std::string firstName;
+    std::string lastName;
+    int age;
+  } my_friends;
   Table (std::string);
   void inputColumn(std::string);
+  void insertData(tableStructure data[]);
 };
 
 Table::Table (std::string tableName) {
   name = tableName;
-  CSV createdTable (tableName);
+  // Save the structure of the table to the persisting DB
+  // structure folder
+  
+  // std::ofstream dbStructFile ("./Structure/db_structure.bin", std::ios::out | std::ios::binary);
+  
 }
 
-void Table::inputColumn (std::string columnName) {
-  if (arrayCount == 20) {
-    columnNames[20] = columnName;
+void insertData(Table::tableStructure rowToInsert) {
+  
+  // Convert the struct to binary:
+  char* row_bytes = reinterpret_cast<char*>(&rowToInsert);
+  // Write the binary to disk
+  std::ofstream myFile ("./data/testData.binary", std::ios::out | std::ios::binary);
+  myFile.write(row_bytes, 100);
+}
+
+void writeBinary(std::string fileName, char *buffer) {
+  std::ofstream openFile (fileName, std::ios::out | std::ios::binary);
+  openFile.write(buffer, 100);
+  openFile.close();
+}
+
+void initDB() {
+  // Check if struct file exist
+  std::ifstream infile("./Structure/db_structure.bin");
+  if (infile.good()) {
+    
   } else {
-    columnNames[arrayCount++] = columnName;
+    // Create table name file
+    std::string tableNames[200];
+    char* tableNames_bytes = reinterpret_cast<char*>(&tableNames);
+    writeBinary("./Structure/table_names.bin", tableNames_bytes);
+    //
   }
 }
 
 int main() {
+  initDB();
   Table myFriends ("my_friends");
-  myFriends.inputColumn("firstname");
-  myFriends.inputColumn("lastname");
-  std::cout << "Hello, World!\n";
+  // Create a row:
+  Table::tableStructure *oneFriend = nullptr;
+  oneFriend->id = 1;
+  oneFriend->firstName = "Franky";
+  oneFriend->lastName = "The Frenchy";
+  oneFriend->age = 6;
+  // Insert the row to the database
+  // myFriends.insertData(oneFriend);
+  
   return 0;
 }
 
